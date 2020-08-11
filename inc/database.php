@@ -4,7 +4,7 @@ function db_create_attribute_templates_table()
 {
     global $wpdb;
     $charset_collate = $wpdb->get_charset_collate();
-    $sql = "CREATE TABLE IF NOT EXISTS `{$wpdb->base_prefix}wtg_title_templates` (
+    $sql = "CREATE TABLE IF NOT EXISTS `{$wpdb->base_prefix}wct_title_templates` (
         `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 	    `post_id` BIGINT(20) UNSIGNED NOT NULL DEFAULT '0',
         `title` VARCHAR(255) NOT NULL COLLATE 'utf8_general_ci',
@@ -13,14 +13,14 @@ function db_create_attribute_templates_table()
         ) $charset_collate;";
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($sql);
-    update_option("wtg_auto_generate", false);
+    update_option("wct_auto_generate", false);
 }
 
-function db_drop_wtg_attribute_templates_table()
+function db_drop_wct_attribute_templates_table()
 {
     global $wpdb;
-    $wpdb->query("DROP TABLE IF EXISTS `{$wpdb->base_prefix}wtg_title_templates`");
-    delete_option("wtg_auto_generate");
+    $wpdb->query("DROP TABLE IF EXISTS `{$wpdb->base_prefix}wct_title_templates`");
+    delete_option("wct_auto_generate");
 }
 
 function db_select_product_attributes()
@@ -36,7 +36,7 @@ function db_select_title_template(array $params = [])
     if (!isset($params['output']))
         $params['output'] = 'ARRAY';
 
-    $query = "SELECT * FROM `{$wpdb->base_prefix}wtg_title_templates`";
+    $query = "SELECT * FROM `{$wpdb->base_prefix}wct_title_templates`";
     $query .= isset($params['id']) ?
         $wpdb->prepare(" WHERE `id` = '%d'", $params['id']) :
         $wpdb->prepare(" WHERE `id` > '0'");
@@ -58,6 +58,6 @@ function db_select_title_template(array $params = [])
 function db_insert_title_template($post_id, $title)
 {
     global $wpdb;
-    $sql = $wpdb->prepare("INSERT INTO `{$wpdb->base_prefix}wtg_title_templates` (`post_id`, `name`) VALUES ('%d','%s');", $post_id, $title);
+    $sql = $wpdb->prepare("INSERT INTO `{$wpdb->base_prefix}wct_title_templates` (`post_id`, `name`) VALUES ('%d','%s');", $post_id, $title);
     $wpdb->query($sql);
 }
