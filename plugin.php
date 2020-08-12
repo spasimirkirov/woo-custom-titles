@@ -58,7 +58,7 @@ class WooTitlePlugin
             },
             'wct_settings',
             'wct_plugin_configuration',
-            ['label_for' => 'wct_auto_generate'],
+            ['label_for' => 'wct_auto_generate']
         );
     }
 }

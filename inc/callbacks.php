@@ -1,9 +1,14 @@
 <?php
 
+use WooCustomTitles\Inc\Database;
+
 function wct_activation_hook()
 {
+    $db = new Database();
+    $db->create_attribute_templates_table();
+    $db->create_title_templates_table();
+    update_option("wct_auto_generate", false);
     flush_rewrite_rules();
-    db_create_attribute_templates_table();
 }
 
 function wct_deactivation_hook()
@@ -13,16 +18,20 @@ function wct_deactivation_hook()
 
 function wct_uninstallation_hook()
 {
+    $db = new Database();
+    $db->drop_title_attributes_table();
+    $db->drop_title_templates_table();
+    delete_option("wct_auto_generate");
     flush_rewrite_rules();
-    db_drop_wct_attribute_templates_table();
 }
 
 function wct_admin_menu()
 {
-    $main_page = add_menu_page('Woo Custom Titles', 'Woo Custom Titles', 'manage_options', 'wct_menu');
+    $main_page = add_menu_page('Woo Custom Titles', 'Woo Custom Titles', 'manage_options', 'woo_custom_titles');
     $pages = [
-        ['wct_menu', 'WCT - Generate', 'Titles', 'manage_options', 'wct_titles', 'wct_titles_page_callback'],
-        ['wct_menu', 'WCT - Settings', 'Settings', 'manage_options', 'wct_settings', 'wct_settings_page_callback'],
+        ['woo_custom_titles', 'Generate custom title templates', 'Templates', 'manage_options', 'woo_custom_titles', 'custom_title_home_page'],
+        ['woo_custom_titles', 'Generate custom title attributes', 'Attributes', 'manage_options', 'woo_custom_title_attributes', 'custom_title_templates_page'],
+        ['woo_custom_titles', 'Custom title settings', 'Settings', 'manage_options', 'woo_custom_titles_settings', 'custom_title_settings_page'],
     ];
     add_action('load-' . $main_page, 'wct_load_admin_scripts');
     foreach ($pages as $page) {
@@ -31,12 +40,17 @@ function wct_admin_menu()
     }
 }
 
-function wct_titles_page_callback()
+function custom_title_home_page()
 {
-//    require_once plugin_dir_path(__FILE__) . 'template/titles.php';
+    require_once plugin_dir_path(__FILE__) . 'template/home.php';
 }
 
-function wct_settings_page_callback()
+function custom_title_templates_page()
+{
+//    require_once plugin_dir_path(__FILE__) . 'template/templates.php';
+}
+
+function custom_title_settings_page()
 {
     require_once plugin_dir_path(__FILE__) . 'template/settings.php';
 }
@@ -54,7 +68,6 @@ function wct_enqueue_bootstrap_scripts()
     wp_enqueue_script('st_bootstrap4_js', plugin_dir_path(__FILE__) . 'assets/css/bootstrap.min.js', array('jquery'), '', true);
 }
 
-
 /**
  * Hooks on product meta update
  * @param $meta_id
@@ -62,7 +75,7 @@ function wct_enqueue_bootstrap_scripts()
  * @param $meta_key
  * @param $meta_value
  */
-function wct_on_post_meta_update_hook($meta_id, $post_id, $meta_key, $meta_value)
+function custom_title_hook_onmetaupdate($meta_id, $post_id, $meta_key, $meta_value)
 {
     // loop trough _product_attributes upon product creation and create the new title template
 //    if ($meta_key === '_product_attributes') {
