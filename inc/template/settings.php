@@ -6,11 +6,11 @@
                     <a class="nav-link" href="<?= admin_url('admin.php?page=woo_custom_titles'); ?>">Релации</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active"
+                    <a class="nav-link"
                        href="<?= admin_url('admin.php?page=woo_custom_titles_create'); ?>">Добави</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= admin_url('admin.php?page=woo_custom_titles_settings'); ?>">Настройки</a>
+                    <a class="nav-link active" href="<?= admin_url('admin.php?page=woo_custom_titles_settings'); ?>">Настройки</a>
                 </li>
             </ul>
             <div class="p-3">

@@ -61,15 +61,21 @@ class Database
 
     function delete_custom_title_relation(array $relation_ids)
     {
-        $sql = "DELETE FROM `{$this->wpdb()->base_prefix}woo_custom_title_relations` WHERE `category_id` IN(" . implode(",", $relation_ids) . ");";
+        $sql = "DELETE FROM `{$this->wpdb()->base_prefix}woo_custom_title_relations` WHERE `id` IN(" . implode(",", $relation_ids) . ");";
         return $this->wpdb()->query($sql);
     }
 
-    public function select_all_categories()
+    public function select_product_categories($parent = 0)
     {
-        return get_terms([
-            'taxonomy' => "product_cat"
-        ]);
+        $args = array(
+            'hide_empty' => 1,
+            'orderby' => 'name',
+            'order' => 'ASC',
+            'taxonomy' => 'product_cat',
+            'pad_counts' => 1
+        );
+        $categories = get_categories($args);
+        return wp_list_filter($categories, array('parent' => $parent));
     }
 
     public function select_product_attributes($params = [])

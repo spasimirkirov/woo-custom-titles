@@ -10,8 +10,6 @@ License: GPLv2 or later
 Text Domain: woo-custom-titles
  */
 
-use WooCustomTitles\Inc\Database;
-
 if (!defined('ABSPATH')) {
     die;
 }
@@ -25,7 +23,7 @@ require plugin_dir_path(__FILE__) . 'vendor/autoload.php';
 
 function woo_custom_titles_activation()
 {
-    $db = new Database();
+    $db = new \WooCustomTitles\Inc\Database();
     $db->create_title_templates_table();
     update_option("woo_custom_titles_autogenerate", false);
     flush_rewrite_rules();
@@ -33,13 +31,13 @@ function woo_custom_titles_activation()
 
 function woo_custom_titles_deactivation()
 {
-    $db = new Database();
-    $db->drop_title_templates_table();
     flush_rewrite_rules();
 }
 
 function woo_custom_titles_uninstall()
 {
+    $db = new \WooCustomTitles\Inc\Database();
+    $db->drop_title_templates_table();
     delete_option("woo_custom_titles_autogenerate");
 }
 

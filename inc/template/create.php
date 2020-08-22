@@ -16,10 +16,7 @@ if (isset($_POST['submit_create_link'])) {
         show_message('<div class="error notice notice-error is-dismissible"><p>Не сте посочили мета атрибут</p></div>');
 }
 
-$available_product_categories = WooCustomTitles\Inc\Api::list_categories();
-$available_product_attributes = WooCustomTitles\Inc\Api::list_distinct_meta_attributes();
-sort($available_product_categories);
-sort($available_product_attributes);
+$available_attribute_relations = WooProductAttributes\Inc\Api::list_relations();
 ?>
 <div class="container my-2">
     <div class="row">
@@ -45,27 +42,39 @@ sort($available_product_attributes);
     <form action="" method="post">
         <div class="p-2">
             <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="select_meta">Избор на мета атрибути</label>
-                    <?php for ($i = 0; $i < 5; $i++): ?>
+                <div class="col-md-6 form-group">
+                    <h6>Изобр на мета атрибути</h6>
+                    <?php for ($i = 0; $i < 3; $i++): ?>
                         <div class="form-row mb-1">
-                            <select class="form-control" id="select_meta" name="meta_name[]">
-                                <option value="">Избор</option>
-                                <?php foreach (array_filter($available_product_attributes) as $attribute): ?>
-                                    <option value="<?php echo $attribute; ?>">
-                                        <?php echo $attribute ?> </option>
-                                <?php endforeach; ?>
-                            </select>
+                            <label>
+                                <select class="form-control" id="select_meta" name="meta_name[]">
+                                    <option value="">Избор</option>
+                                    <?php foreach ($available_attribute_relations as $j => $relation): ?>
+                                        <option disabled class="select-relation-meta"
+                                                data-parent="<?= $relation['category_id'] ?>">
+                                            <?php echo $relation['category_name'] ?>
+                                        </option>
+                                        <?php foreach (unserialize($relation['meta_value']) as $attribute): ?>
+                                            <option class="select-relation-meta"
+                                                    data-parent="<?= $relation['category_id'] ?>"
+                                                    value="<?php echo $attribute; ?>">
+                                                &#x21B3; <?php echo $attribute ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    <?php endforeach; ?>
+                                </select>
+                            </label>
                         </div>
                     <?php endfor; ?>
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="select_category">Избор на категория</label>
-                    <select class="form-control" id="select_category" name="category_id">
+                    <label for="select-relation-category">Избор на категория</label>
+                    <select class="form-control" id="select-relation-category" name="category_id">
                         <option value="none">Избор</option>
-                        <?php foreach ($available_product_categories as $category): ?>
-                            <option value="<?php echo $category->term_id; ?>">
-                                <?php echo $category->name ?> </option>
+                        <?php foreach ($available_attribute_relations as $relation): ?>
+                            <option value="<?php echo $relation['category_id']; ?>"> &#x21B3;
+                                <?php echo $relation['category_name'] ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                     <p class="text-secondary">

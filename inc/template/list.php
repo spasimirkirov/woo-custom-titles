@@ -20,10 +20,10 @@ $available_relations = $api->get_relations();
         <div class="col-12">
             <ul class="nav nav-tabs p-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= admin_url('admin.php?page=woo_custom_titles'); ?>">Релации</a>
+                    <a class="nav-link active" href="<?= admin_url('admin.php?page=woo_custom_titles'); ?>">Релации</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active"
+                    <a class="nav-link"
                        href="<?= admin_url('admin.php?page=woo_custom_titles_create'); ?>">Добави</a>
                 </li>
                 <li class="nav-item">
@@ -55,7 +55,7 @@ $available_relations = $api->get_relations();
                                     </label>
                                 </td>
                                 <td>
-                                    <?= implode(' ', unserialize($relation['attributes'])) ?>
+                                    <?= implode(', ', unserialize($relation['attributes'])) ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
