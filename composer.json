@@ -1,0 +1,16 @@
+{
+    "name": "razielvonchronos/woo-custom-titles",
+    "description": "Generates product custom title templates and replace print them in the theme instead of the original ones",
+    "authors": [
+        {
+            "name": "Spasimir Kirov",
+            "email": "spasimirkirov@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "WooCustomTitles\\Inc\\" : "inc"
+        }
+    }
+}
