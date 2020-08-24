@@ -41,20 +41,29 @@ function woo_custom_titles_uninstall()
     delete_option("woo_custom_titles_autogenerate");
 }
 
-$is_woo_active = in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')));
-if (!$is_woo_active) {
-    add_action('admin_notices', function () {
-        ?>
-        <div class="notice notice-warning is-dismissible">
-            <p><?php _e('WooCommerce е неактивен, моля активирайте го преди да използвате Woo Attribute Generator'); ?></p>
-        </div>
-        <?php
-    });
-} else {
+$dependencies = [
+    'woocommerce/woocommerce.php' => 'WooCommerce',
+    'woo-product-attributes/plugin.php' => 'Woo Product Attributes',
+];
+
+$errors = 0;
+foreach ($dependencies as $plugin_file => $plugin_name) {
+    $is_plugin_active = in_array($plugin_file, apply_filters('active_plugins', get_option('active_plugins')));
+    if (!$is_plugin_active) {
+        add_action('admin_notices', function () use ($plugin_name) {
+            ?>
+            <div class="notice notice-warning is-dismissible">
+                <p><?php _e('' . $plugin_name . ' е неактивен, моля активирайте го преди да използвате Woo Custom Titles'); ?></p>
+            </div>
+            <?php
+        });
+        $errors++;
+    }
+}
+if ($errors === 0) {
     register_activation_hook(__FILE__, 'woo_custom_titles_activation');
     register_deactivation_hook(__FILE__, 'woo_custom_titles_deactivation');
     register_uninstall_hook(__FILE__, 'woo_custom_titles_uninstall');
     $WooAttributePlugin = new \WooCustomTitles\Inc\WooTitlesPlugin();
     $WooAttributePlugin->init();
-
 }
