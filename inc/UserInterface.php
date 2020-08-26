@@ -13,8 +13,7 @@ class UserInterface extends WooTitlesPlugin
         $this->pages['main'] = add_menu_page('Woo Custom Titles', 'Woo Custom Titles', 'manage_options', 'woo_custom_titles');
         $this->pages['sub'] = [
             ['woo_custom_titles', 'Woo Custom Titles', 'Релации', 'manage_options', 'woo_custom_titles', [$this, 'woo_custom_titles_page']],
-            ['woo_custom_titles', 'Woo Custom Titles', 'Шаблони', 'manage_options', 'woo_custom_titles_templates', [$this, 'woo_custom_titles_templates_page']],
-            ['woo_custom_titles', 'Woo Custom Titles Create', 'Създаване', 'manage_options', 'woo_custom_titles_create', [$this, 'woo_custom_titles_create_page']],
+            ['woo_custom_titles', 'Woo Custom Titles Create', 'Добавяне', 'manage_options', 'woo_custom_titles_create', [$this, 'woo_custom_titles_create_page']],
             ['woo_custom_titles', 'Woo Custom Titles Settings', 'Настройки', 'manage_options', 'woo_custom_titles_settings', [$this, 'woo_custom_titles_settings_page']],
         ];
     }
@@ -22,11 +21,6 @@ class UserInterface extends WooTitlesPlugin
     public function woo_custom_titles_page()
     {
         require_once $this->template_path . '/list.php';
-    }
-
-    public function woo_custom_templates_page()
-    {
-        require_once $this->template_path . '/templates.php';
     }
 
     public function woo_custom_titles_create_page()

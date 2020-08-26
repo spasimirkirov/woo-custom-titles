@@ -3,7 +3,6 @@
 
 namespace WooCustomTitles\Inc;
 
-
 class Api
 {
     public $db;
