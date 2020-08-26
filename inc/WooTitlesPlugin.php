@@ -54,21 +54,26 @@ class WooTitlesPlugin
 
     public function shorten_woo_product_title($title, $post_id)
     {
-        if (get_post_type($post_id) === 'product') {
-            $db = new Database();
-            $terms = get_the_terms($post_id, 'product_cat')[0];
-            $relation = $db->select_custom_title_relations(['category_id' => $terms->term_id, 'row' => 0]);
-            if (!$relation)
-                return $title;
-            $relation_attributes = array_filter(unserialize($relation['attributes']));
-            $_product_attributes = unserialize($db->select_product_attributes(['post_id' => $post_id])['_product_attributes']);
-            $new_title = array_map(function ($attribute_name) use ($_product_attributes) {
-                $i = array_search($attribute_name, array_column($_product_attributes, 'name'), false);
-                return $i === false ? $i : $_product_attributes[$i]['value'];
-            }, $relation_attributes);
-            $title = implode(' ', $new_title);
-        }
+        return $this->get_shorten_name($post_id) ?: $title;
+    }
 
-        return $title;
+    public function get_shorten_name($post_id)
+    {
+        if (get_post_type($post_id) !== 'product')
+            return null;
+        $db = new Database();
+        $terms = get_the_terms($post_id, 'product_cat')[0];
+        $relation = $db->select_custom_title_relations(['category_id' => $terms->term_id, 'row' => 0]);
+        if (!$relation)
+            return null;
+        $relation_attributes = array_filter(unserialize($relation['attributes']));
+        $_product_attributes = unserialize($db->select_product_attributes(['post_id' => $post_id])['_product_attributes']);
+        if(!$_product_attributes)
+            return null;
+        $new_title = array_map(function ($attribute_name) use ($_product_attributes) {
+            $i = array_search($attribute_name, array_column($_product_attributes, 'name'), false);
+            return $i === false ? $i : $_product_attributes[$i]['value'];
+        }, $relation_attributes);
+        return implode(' ', $new_title);
     }
 }

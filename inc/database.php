@@ -83,7 +83,8 @@ class Database
         $prefix = $this->wpdb()->base_prefix;
         $sql = "SELECT `post_id`, `meta_value` as `_product_attributes` FROM `{$prefix}postmeta` WHERE meta_key ='_product_attributes'";
         $sql .= isset($params['post_id']) ?
-            $this->wpdb()->prepare("AND `post_id` = '%s'", $params['post_id']) : " AND `post_id` IN (SELECT ID FROM `{$prefix}posts` WHERE `post_type` = 'product')";
+            $this->wpdb()->prepare("AND `post_id` = '%d'", $params['post_id']) :
+            " AND `post_id` IN (SELECT ID FROM `{$prefix}posts` WHERE `post_type` = 'product')";
         return isset($params['post_id']) ? $this->wpdb()->get_row($sql, 'ARRAY_A', 0) : $this->wpdb()->get_results($sql, 'ARRAY_A');
     }
 
