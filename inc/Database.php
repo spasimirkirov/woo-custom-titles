@@ -4,6 +4,16 @@ namespace WooCustomTitles\Inc;
 
 class Database
 {
+    private $relations_table_name;
+
+    /**
+     * Database constructor.
+     */
+    public function __construct()
+    {
+        $this->relations_table_name = $this->wpdb()->prefix.'woo_custom_title_relations';
+    }
+
     public function wpdb()
     {
         global $wpdb;
@@ -13,7 +23,7 @@ class Database
     function create_title_templates_table()
     {
         $charset_collate = $this->wpdb()->get_charset_collate();
-        $sql = "CREATE TABLE IF NOT EXISTS `{$this->wpdb()->base_prefix}woo_custom_title_relations` (
+        $sql = "CREATE TABLE IF NOT EXISTS `{$this->relations_table_name}` (
         `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 	    `category_id` BIGINT(20) UNSIGNED NOT NULL DEFAULT '0',
 	    `attributes` LONGTEXT NULL DEFAULT NULL COLLATE 'utf8_general_ci',
@@ -26,7 +36,7 @@ class Database
 
     function drop_title_templates_table()
     {
-        $this->wpdb()->query("DROP TABLE IF EXISTS `{$this->wpdb()->base_prefix}woo_custom_title_relations`");
+        $this->wpdb()->query("DROP TABLE IF EXISTS `{$this->relations_table_name}`");
     }
 
     function select_custom_title_relations(array $params = [])
@@ -34,7 +44,7 @@ class Database
         if (!isset($params['output']))
             $params['output'] = 'ARRAY_A';
 
-        $sql = "SELECT a.`id`, a.`category_id`, b.`name` as `category_name`, a.`attributes` FROM `{$this->wpdb()->base_prefix}woo_custom_title_relations` as a";
+        $sql = "SELECT a.`id`, a.`category_id`, b.`name` as `category_name`, a.`attributes` FROM `{$this->relations_table_name}` as a";
         $sql .= " INNER JOIN `{$this->wpdb()->base_prefix}terms` as b ON a.`category_id` = b.`term_id`";
 
         $sql .= isset($params['id']) ?
@@ -55,13 +65,13 @@ class Database
 
     function insert_custom_title_relation($category_id, $attributes)
     {
-        $sql = $this->wpdb()->prepare("INSERT INTO `{$this->wpdb()->base_prefix}woo_custom_title_relations` (`category_id`, `attributes`) VALUES ('%d','%s');", $category_id, $attributes);
+        $sql = $this->wpdb()->prepare("INSERT INTO `{$this->relations_table_name}` (`category_id`, `attributes`) VALUES ('%d','%s');", $category_id, $attributes);
         return $this->wpdb()->query($sql);
     }
 
     function delete_custom_title_relation(array $relation_ids)
     {
-        $sql = "DELETE FROM `{$this->wpdb()->base_prefix}woo_custom_title_relations` WHERE `id` IN(" . implode(",", $relation_ids) . ");";
+        $sql = "DELETE FROM `{$this->relations_table_name}` WHERE `id` IN(" . implode(",", $relation_ids) . ");";
         return $this->wpdb()->query($sql);
     }
 
