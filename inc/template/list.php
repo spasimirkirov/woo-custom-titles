@@ -27,59 +27,57 @@ $available_relations = $api->get_relations();
                        href="<?= admin_url('admin.php?page=woo_custom_titles_create'); ?>">Добави</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= admin_url('admin.php?page=woo_custom_titles_settings'); ?>">Настройки</a>
+                    <a class="nav-link"
+                       href="<?= admin_url('admin.php?page=woo_custom_titles_settings'); ?>">Настройки</a>
                 </li>
             </ul>
             <div class="card-header bg-dark text-light">
                 Управление на параметрите за персонални заглавия
             </div>
-            <div class="p-2">
-                <form action="" method="post">
-                    <table class="table table-hover table-sm">
+        </div>
+        <div class="form-group col-12">
+            <form action="" method="post">
+                <table class="table table-bordered table-hover">
+                    <tr>
+                        <th>
+                            <label>
+                                <input id="checkbox_select_all" type="checkbox">
+                                Категория
+                            </label>
+                        </th>
+                        <th>Мета атрибути</th>
+                    </tr>
+                    <?php foreach ($available_relations as $i => $relation): ?>
                         <tr>
-                            <th>
-                                <label>
-                                    <input id="checkbox_select_all" type="checkbox">
-                                    Категория
+                            <td>
+                                <label for="taxonomy_<?= $i ?>">
+                                    <input class="checkbox-taxonomy" type="checkbox" name="relation_ids[]"
+                                           value="<?= $relation['id'] ?>">
+                                    <?= $relation['category_name'] ?>
                                 </label>
-                            </th>
-                            <th>Мета атрибути</th>
+                            </td>
+                            <td>
+                                <?= implode(', ', unserialize($relation['attributes'])) ?>
+                            </td>
                         </tr>
-                        <?php foreach ($available_relations as $i => $relation): ?>
-                            <tr>
-                                <td>
-                                    <label for="taxonomy_<?= $i ?>">
-                                        <input class="checkbox-taxonomy" type="checkbox" name="relation_ids[]"
-                                               value="<?= $relation['id'] ?>">
-                                        <?= $relation['category_name'] ?>
-                                    </label>
-                                </td>
-                                <td>
-                                    <?= implode(', ', unserialize($relation['attributes'])) ?>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                        <?php if (empty($available_relations)): ?>
-                            <tr>
-                                <td colspan="3">Не са намерени записи на релации</td>
-                            </tr>
-                        <?php endif; ?>
-                    </table>
-                    <?php if (!empty($available_relations)): ?>
-                        <div class="form-group">
-                            <label for="select_action">Изберете действие</label>
-                            <div class="form-row mb-4">
-                                <select class="custom-select form-control mr-1" id="select_action" name="action">
-                                    <option value="none">Избор</option>
-                                    <option value="delete">Изтриване</option>
-                                </select>
-                                <input class="btn btn-primary btn-sm" name="submit_relation_action" type="submit"
-                                       value="Изпълни">
-                            </div>
-                        </div>
+                    <?php endforeach; ?>
+                    <?php if (empty($available_relations)): ?>
+                        <tr>
+                            <td colspan="3">Не са намерени записи на релации</td>
+                        </tr>
                     <?php endif; ?>
-                </form>
-            </div>
+                </table>
+                <div class="form-row">
+                    <div class="form-group col-12">
+                        <label for="select_action">Изберете действие</label><br>
+                        <select class="form-control custom-select" id="select_action" name="action">
+                            <option value="none">Избор</option>
+                            <option value="delete">Изтриване</option>
+                        </select>
+                        <input class="btn btn-primary" name="submit_relation_action" type="submit" value="Изпълни">
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
