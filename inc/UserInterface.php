@@ -44,10 +44,10 @@ class UserInterface extends WooTitlesPlugin
 
     public function enqueue_scripts()
     {
-        wp_enqueue_style('bootstrap4_css', $this->plugin_url . 'assets/css/bootstrap.min.css');
-        wp_enqueue_script('jquery_slim_min', $this->plugin_url . 'assets/js/jquery-3.5.1.slim.min.js', array('jquery'), '', true);
-        wp_enqueue_script('popper_min', $this->plugin_url . 'assets/js/popper.min.js', array('jquery'), '', true);
-        wp_enqueue_script('bootstrap4_js', $this->plugin_url . 'assets/js/bootstrap.min.js', array('jquery'), '', true);
-        wp_enqueue_script('plugin_main_js', $this->plugin_url . 'assets/js/main.js', '', '', true);
+        wp_enqueue_style('wct_bootstrap4_css', $this->plugin_url . 'assets/css/bootstrap.min.css');
+        wp_enqueue_script('wct_jquery_slim_min', $this->plugin_url . 'assets/js/jquery-3.5.1.slim.min.js', array('jquery'), '', true);
+        wp_enqueue_script('wct_popper_min', $this->plugin_url . 'assets/js/popper.min.js', array('jquery'), '', true);
+        wp_enqueue_script('wct_bootstrap4_js', $this->plugin_url . 'assets/js/bootstrap.min.js', array('jquery'), '', true);
+        wp_enqueue_script('wct_plugin_main_js', $this->plugin_url . 'assets/js/main.js', '', '', true);
     }
 }
