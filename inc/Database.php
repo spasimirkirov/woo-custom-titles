@@ -49,7 +49,7 @@ class Database
 
         $sql .= isset($params['id']) ?
             $this->wpdb()->prepare(" WHERE `id` = '%d'", $params['id']) :
-            $this->wpdb()->prepare(" WHERE `id` > '0'");
+            $this->wpdb()->prepare(" WHERE `id` > '%d'", 0);
 
         if (isset($params['category_id']))
             $sql .= $this->wpdb()->prepare(" AND `category_id` = '%d'", $params['category_id']);
